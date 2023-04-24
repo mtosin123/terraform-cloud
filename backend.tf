@@ -15,15 +15,15 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
-terraform {
-  backend "s3" {
-    bucket         = "dev-terraform-bucket"
-    key            = "global/s3/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
-  }
-}
+# terraform {
+#   backend "s3" {
+#     bucket         = "dev-terraform-bucket"
+#     key            = "global/s3/terraform.tfstate"
+#     region         = "us-east-1"
+#     dynamodb_table = "terraform-locks"
+#     encrypt        = true
+#   }
+# }
 
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = "terraform-locks"
@@ -37,7 +37,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 
 terraform {
   backend "remote" {
-    organization = "pisitis"
+    organization = "Tars-Hub-Enterprises"
 
     workspaces {
       name = "terraform-cloud"
