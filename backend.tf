@@ -34,3 +34,13 @@ resource "aws_dynamodb_table" "terraform_locks" {
     type = "S"
   }
 }
+
+terraform {
+  backend "remote" {
+    organization = "pisitis"
+
+    workspaces {
+      name = "terraform-cloud"
+    }
+  }
+}
