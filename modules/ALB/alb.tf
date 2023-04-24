@@ -1,27 +1,27 @@
-resource "aws_lb" "ext-alb" {
-  name     = "ext-alb"
-  internal = false
-  security_groups = [
-    aws_security_group.ext-alb-sg.id,
-  ]
+# ----------------------------
+#External Load balancer for reverse proxy nginx
+#---------------------------------
 
-  subnets = [
-    var.public-sbn-1,
-    var.public-sbn-2
-  ]
+resource "aws_lb" "ext-alb" {
+  name            = var.name
+  internal        = false
+  security_groups = [var.public-sg]
+
+  subnets = [var.public-sbn-1,
+  var.public-sbn-2, ]
 
   tags = merge(
     var.tags,
     {
-      Name = "ACS-ext-alb"
+      Name = var.name
     },
   )
 
-  ip_address_type    = "ipv4"
-  load_balancer_type = "application"
+  ip_address_type    = var.ip_address_type
+  load_balancer_type = var.load_balancer_type
 }
 
-
+#--- create a target group for the external load balancer
 resource "aws_lb_target_group" "nginx-tgt" {
   health_check {
     interval            = 10
@@ -37,6 +37,8 @@ resource "aws_lb_target_group" "nginx-tgt" {
   target_type = "instance"
   vpc_id      = var.vpc_id
 }
+
+#--- create a listener for the load balancer
 
 resource "aws_lb_listener" "nginx-listner" {
   load_balancer_arn = aws_lb.ext-alb.arn
@@ -57,16 +59,13 @@ resource "aws_lb_listener" "nginx-listner" {
 resource "aws_lb" "ialb" {
   name     = "ialb"
   internal = true
-  security_groups = [
-    aws_security_group.int-alb-sg.id,
-  ]
 
-  subnets = [
-    var.private-sbn-2,
-    var.private-sbn-2
-  ]
+  security_groups = [var.private-sg]
 
-  tags = merge(
+  subnets = [var.private-sbn-1,
+  var.private-sbn-2, ]
+
+    tags = merge(
     var.tags,
     {
       Name = "ACS-int-alb"
@@ -76,6 +75,7 @@ resource "aws_lb" "ialb" {
   ip_address_type    = var.ip_address_type
   load_balancer_type = var.load_balancer_type
 }
+
 
 # --- target group  for wordpress -------
 
@@ -89,12 +89,13 @@ resource "aws_lb_target_group" "wordpress-tgt" {
     unhealthy_threshold = 2
   }
 
-  name        = "wordpress-tgt"
-  port        = 443
+  name     = "wordpress-tgt"
+   port        = 443
   protocol    = "HTTPS"
   target_type = "instance"
-  vpc_id      = aws_vpc.main.id
-}
+  vpc_id      = var.vpc_id
+  }
+
 
 # --- target group for tooling -------
 
@@ -118,11 +119,13 @@ resource "aws_lb_target_group" "tooling-tgt" {
 # For this aspect a single listener was created for the wordpress which is default,
 # A rule was created to route traffic to tooling when the host header changes
 
+
 resource "aws_lb_listener" "web-listener" {
   load_balancer_arn = aws_lb.ialb.arn
   port              = 443
   protocol          = "HTTPS"
   certificate_arn   = aws_acm_certificate_validation.tars.certificate_arn
+
 
   default_action {
     type             = "forward"
@@ -130,7 +133,7 @@ resource "aws_lb_listener" "web-listener" {
   }
 }
 
-# listener rule for tooling target
+# # listener rule for tooling target
 
 resource "aws_lb_listener_rule" "tooling-listener" {
   listener_arn = aws_lb_listener.web-listener.arn
