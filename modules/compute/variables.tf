@@ -5,13 +5,19 @@ variable "ami-jenkins" {
     type = string
     description = "ami for jenkins"
 }
+
+variable "ami-bastion" {
+  type = string
+  description = "The ID of the AMI for the bastion host"
+}
+
 variable "ami-jfrog" {
     type = string
-    description = "ami for jfrob"
+    description = "ami for jfrog"
 }
 variable "ami-sonar" {
     type = string
-    description = "ami foir sonar"
+    description = "ami for sonar"
 }
 variable "sg-compute" {
     description = "security group for compute instances"

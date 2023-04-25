@@ -16,7 +16,7 @@ preferred_number_of_private_subnets = "4"
 
 environment = "production"
 
-ami = "ami-0b0af3577fe5e3532"
+# ami = "ami-0b0af3577fe5e3532"
 
 keypair = "devops"
 
@@ -34,10 +34,10 @@ tags = {
   Billing-Account = "1234567890"
 }
 
-ami-bastion = "ami-00f5fe02f9f7c4219"
+ami-bastion = "ami-089fb3c6f1ad9b49c"
 
-ami-nginx = "ami-0f8c81fc653b7c095"
+ami-nginx = "ami-0d3b2976122f3fc1c"
 
-ami-sonar = "ami-0827af7b71422b1b9"
+ami-sonar = "ami-0cf425c1c11c6748f"
 
-ami-web = "ami-0508b7e8e56b9aadb"
+ami-web = "ami-0d9ba122d0a8625d6"

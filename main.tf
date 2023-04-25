@@ -1,3 +1,34 @@
+# #############################
+# ##creating bucket for s3 backend
+# #########################
+# resource "aws_s3_bucket" "terraform_state" {
+#   bucket = "pbl-test-18"
+
+#   versioning {
+#     enabled = true
+#   }
+#   force_destroy = true
+
+#   server_side_encryption_configuration {
+#     rule {
+#       apply_server_side_encryption_by_default {
+#         sse_algorithm = "AES256"
+#       }
+#     }
+#   }
+# }
+
+# resource "aws_dynamodb_table" "terraform_locks" {
+#   name         = "terraform-locks"
+#   billing_mode = "PAY_PER_REQUEST"
+#   hash_key     = "LockID"
+#   attribute {
+#     name = "LockID"
+#     type = "S"
+#   }
+# }
+
+
 # creating VPC
 module "VPC" {
   source                              = "./modules/VPC"
@@ -35,12 +66,12 @@ module "security" {
 
 module "AutoScaling" {
   source            = "./modules/Autoscaling"
-  ami-web           = var.ami
-  ami-bastion       = var.ami
-  ami-nginx         = var.ami
-  desired_capacity  = 2
-  min_size          = 2
-  max_size          = 2
+  ami-web           = var.ami-web
+  ami-bastion       = var.ami-bastion
+  ami-nginx         = var.ami-nginx
+  desired_capacity  = 1
+  min_size          = 1
+  max_size          = 1
   web-sg            = [module.security.web-sg]
   bastion-sg        = [module.security.bastion-sg]
   nginx-sg          = [module.security.nginx-sg]
@@ -54,7 +85,7 @@ module "AutoScaling" {
 
 }
 
-# Module for Elastic Filesystem; this module will creat elastic file system isn the webservers availablity
+# Module for Elastic Filesystem; this module will create elastic file system isn the webservers availablity
 # zone and allow traffic fro the webservers
 
 module "EFS" {
@@ -75,13 +106,14 @@ module "RDS" {
   private_subnets = [module.VPC.private_subnets-3, module.VPC.private_subnets-4]
 }
 
-# The Module creates instances for jenkins, sonarqube abd jfrog
+#The Module creates instances for jenkins, sonarqube abd jfrog
 module "compute" {
   source          = "./modules/compute"
-  ami-jenkins     = var.ami
-  ami-sonar       = var.ami
-  ami-jfrog       = var.ami
+  ami-jenkins     = var.ami-bastion
+  ami-bastion     = var.ami-bastion
+  ami-sonar       = var.ami-sonar
+  ami-jfrog       = var.ami-bastion
   subnets-compute = module.VPC.public_subnets-1
-  sg-compute      = [module.security.ALB-sg]
+  sg-compute      = [module.security.compute-sg]
   keypair         = var.keypair
 }

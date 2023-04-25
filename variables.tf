@@ -46,10 +46,11 @@ variable "tags" {
   default     = {}
 }
 
-variable "ami" {
+variable "ami-bastion" {
   type        = string
   description = "AMI ID for the launch template"
 }
+
 
 variable "keypair" {
   type        = string
@@ -69,4 +70,19 @@ variable "master-username" {
 variable "master-password" {
   type        = string
   description = "RDS master password"
+}
+
+variable "ami-web" {
+  type        = string
+  description = "ami for web"
+}
+
+variable "ami-nginx" {
+  type        = string
+  description = "ami for nginx"
+}
+
+variable "ami-sonar" {
+  type        = string
+  description = "ami for sonar"
 }
