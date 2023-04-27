@@ -34,10 +34,10 @@ tags = {
   Billing-Account = "1234567890"
 }
 
-ami-bastion = "ami-089fb3c6f1ad9b49c"
+ami-bastion = "ami-03a454637e4aa453d"
 
-ami-nginx = "ami-0d3b2976122f3fc1c"
+ami-nginx = "ami-03a454637e4aa453d"
 
-ami-sonar = "ami-0cf425c1c11c6748f"
+ami-sonar = " ami-0b0ea68c435eb488d"
 
-ami-web = "ami-0d9ba122d0a8625d6"
+ami-web = "ami-03a454637e4aa453d"
