@@ -1,4 +1,4 @@
-region = "us-west-1"
+region = "us-east-1"
 
 vpc_cidr = "172.16.0.0/16"
 
@@ -18,7 +18,7 @@ environment = "production"
 
 # ami = "ami-0b0af3577fe5e3532"
 
-keypair = "Devops"
+keypair = "devops"
 
 # Ensure to change this to your acccount number
 account_no = "647802172908"
@@ -34,10 +34,10 @@ tags = {
   Billing-Account = "1234567890"
 }
 
-ami-bastion = "ami-0016232861f380b64"
+ami-bastion = "ami-0e99eafecc9af4b45"
 
-ami-nginx = "ami-0795c7bbda4379e38"
+ami-nginx = "ami-05f14ba16b099ebd8"
 
-ami-sonar = "ami-038d742dd281deeda"
+ami-sonar = "ami-002069fbd8c6d15f2"
 
-ami-web = "ami-0e28e352d687e568d"
+ami-web = "ami-096c49865df1b98d4"
