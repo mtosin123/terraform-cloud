@@ -44,3 +44,6 @@ terraform {
     }
   }
 }
+
+
+# terraform now configured
