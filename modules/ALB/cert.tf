@@ -1,13 +1,13 @@
 # The entire section create a certiface, public zone, and validate the certificate using DNS method
 
-# Create the certificate using a wildcard for all the domains created in oyindamola.gq
+# Create the certificate using a wildcard for all the domains created in david.toolingabby.com
 resource "aws_acm_certificate" "tars" {
   domain_name       = "*.tarshubenterprise.co.uk"
   validation_method = "DNS"
 }
 
 # calling the hosted zone
-data "aws_route53_zone" "tars" {
+data "aws_route53_zone" "tars_zone" {
   name         = "tarshubenterprise.co.uk"
   private_zone = false
 }
@@ -27,18 +27,18 @@ resource "aws_route53_record" "tars" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.tars.zone_id
+  zone_id         = data.aws_route53_zone.tars_zone.zone_id
 }
 
 # validate the certificate through DNS method
-resource "aws_acm_certificate_validation" "tars" {
+resource "aws_acm_certificate_validation" "tars_validation" {
   certificate_arn         = aws_acm_certificate.tars.arn
   validation_record_fqdns = [for record in aws_route53_record.tars : record.fqdn]
 }
 
 # create records for tooling
 resource "aws_route53_record" "tooling" {
-  zone_id = data.aws_route53_zone.tars.zone_id
+  zone_id = data.aws_route53_zone.tars_zone.zone_id
   name    = "tooling.tarshubenterprise.co.uk"
   type    = "A"
 
@@ -49,9 +49,10 @@ resource "aws_route53_record" "tooling" {
   }
 }
 
+
 # create records for wordpress
 resource "aws_route53_record" "wordpress" {
-  zone_id = data.aws_route53_zone.tars.zone_id
+  zone_id = data.aws_route53_zone.tars_zone.zone_id
   name    = "wordpress.tarshubenterprise.co.uk"
   type    = "A"
 

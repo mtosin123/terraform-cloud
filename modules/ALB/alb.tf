@@ -44,7 +44,7 @@ resource "aws_lb_listener" "nginx-listner" {
   load_balancer_arn = aws_lb.ext-alb.arn
   port              = 443
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.tars.certificate_arn
+  certificate_arn   = aws_acm_certificate_validation.tars_validation.certificate_arn
 
   default_action {
     type             = "forward"
@@ -124,7 +124,7 @@ resource "aws_lb_listener" "web-listener" {
   load_balancer_arn = aws_lb.ialb.arn
   port              = 443
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.tars.certificate_arn
+  certificate_arn   = aws_acm_certificate_validation.tars_validation.certificate_arn
 
 
   default_action {
